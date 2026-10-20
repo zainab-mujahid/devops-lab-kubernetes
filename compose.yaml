@@ -1,0 +1,13 @@
+services:
+  lab-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    
+    image: devops:local
+    container_name: devops-lab
+    
+    ports:
+      - "3000:3000"
+
+    restart: unless-stopped
