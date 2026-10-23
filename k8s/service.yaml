@@ -3,9 +3,9 @@ kind: Service
 metadata:
   name: devops-lab-service
   labels:
-    app: devops-lab-internal&external-svc
+    app: devops-lab-internalexternal-svc
 spec:
-  type: Nodeport
+  type: NodePort
   selector:
     app: devops-lab
   ports:
@@ -13,4 +13,4 @@ spec:
       protocol: TCP
       port: 80
       targetPort: 3000
-      nodeport: 30080
+      nodePort: 30080
