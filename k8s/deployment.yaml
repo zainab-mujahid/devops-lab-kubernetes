@@ -1,24 +1,50 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: devops-lab
+  name: lab-deployment
+  namespace: dev-ns
   labels:
     app: devops-lab
-    team: devops
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: devops-lab
+      app: devops-lab-pod
   template:
     metadata:
       labels:
-        app: devops-lab
-        tier: frontend
+        app: devops-lab-pod
     spec:
       containers:
-        - name: nextjs
-          image: zainabmujahid/devops-lab:v1
-          imagePullPolicy: IfNotPresent
+        - name: devops-lab-container
+          image: zainabmujahid/devops-lab:v2
           ports:
             - containerPort: 3000
+          envFrom:
+            - configMapRef:
+                name: lab-configmap
+            - secretRef:
+                name: lab-secrets
+          readinessProbe:
+            httpGet:
+              path: /api/health
+              port: 3000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 2
+            failureThreshold: 3
+            successThreshold: 1
+          resources:
+            requests:
+              cpu: "25m"
+              memory: "64Mi"
+            limits:
+              cpu: "50m"
+              memory: "128Mi"
+          volumeMounts:
+            - name: app-volume
+              mountPath: /data
+      volumes:
+        - name: app-volume
+          persistentVolumeClaim:
+            claimName: lab-pvc

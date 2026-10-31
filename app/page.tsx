@@ -9,6 +9,10 @@ async function ApplicationConfiguration() {
   const appVersion = process.env.APP_VERSION;
   const logLevel = process.env.LOG_LEVEL;
 
+  const secretStatus = process.env.DEMO_API_KEY
+  ? "Loaded Successfully"
+  : "Not Configured";
+
   return (
     <>
       <h2>Application Configuration</h2>
@@ -37,6 +41,10 @@ async function ApplicationConfiguration() {
         LOG_LEVEL:{" "}
         {logLevel !== undefined ? "Environment Variable" : "Not Set"}
       </p>
+
+      <h2>Secret Configuration</h2>
+
+      <p>DEMO_API_KEY: {secretStatus}</p>
     </>
   );
 }
